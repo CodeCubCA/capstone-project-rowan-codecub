@@ -225,6 +225,39 @@ st.markdown("""
         box-shadow: 0 0 20px rgba(102, 126, 234, 0.4) !important;
     }
 
+    /* Chat input styling */
+    .stChatInput>div>div>textarea,
+    .stChatInputContainer>div>div>textarea {
+        background: rgba(22, 33, 62, 0.9) !important;
+        color: white !important;
+        border: 2px solid rgba(102, 126, 234, 0.4) !important;
+        border-radius: 12px !important;
+        font-family: 'Orbitron', sans-serif !important;
+        box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .stChatInput>div>div>textarea:focus,
+    .stChatInputContainer>div>div>textarea:focus {
+        border-color: rgba(102, 126, 234, 0.9) !important;
+        box-shadow: 0 0 25px rgba(102, 126, 234, 0.5) !important;
+    }
+
+    /* Chat input send button */
+    .stChatInput button,
+    .stChatInputContainer button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease;
+    }
+
+    .stChatInput button:hover,
+    .stChatInputContainer button:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.6) !important;
+    }
+
     /* Selectbox styling */
     .stSelectbox>div>div {
         background: rgba(22, 33, 62, 0.8) !important;
@@ -337,31 +370,23 @@ with tab1:
     st.markdown("### 💬 Text Chat Mode")
     st.markdown('<div class="info-box">Have a conversation with AI. Ask questions, get help, or just chat!</div>', unsafe_allow_html=True)
 
-    # Chat container
-    chat_container = st.container()
-
     # Display chat history
-    with chat_container:
-        for message in st.session_state.text_messages:
-            if message["role"] == "user":
-                st.markdown(f'<div class="chat-message user-message">👤 You: {message["content"]}</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<div class="chat-message assistant-message">🤖 Assistant: {message["content"]}</div>', unsafe_allow_html=True)
+    for message in st.session_state.text_messages:
+        if message["role"] == "user":
+            st.markdown(f'<div class="chat-message user-message">👤 You: {message["content"]}</div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="chat-message assistant-message">🤖 Assistant: {message["content"]}</div>', unsafe_allow_html=True)
 
-    # Chat input
-    col1, col2 = st.columns([6, 1])
-    with col1:
-        user_input = st.text_input("Type your message:", key="text_input", label_visibility="collapsed", placeholder="Ask me anything...")
-    with col2:
-        send_button = st.button("Send", use_container_width=True)
+    # Chat input using st.chat_input (auto-sends on Enter)
+    user_input = st.chat_input("Ask me anything...", key="text_chat_input")
 
     # Clear chat button
     if st.button("🗑️ Clear Chat"):
         st.session_state.text_messages = []
         st.rerun()
 
-    # Handle message sending
-    if send_button and user_input.strip():
+    # Handle message sending (triggers on Enter)
+    if user_input and user_input.strip():
         # Add user message
         st.session_state.text_messages.append({"role": "user", "content": user_input})
 
