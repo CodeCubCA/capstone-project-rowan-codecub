@@ -325,6 +325,24 @@ st.markdown("""
         border: 2px solid rgba(102, 126, 234, 0.3) !important;
         backdrop-filter: blur(10px) !important;
     }
+
+    /* Audio recorder styling */
+    .st-emotion-cache-1gulkj5,
+    .audio-recorder-container,
+    iframe[title*="audio"] {
+        background: rgba(22, 33, 62, 0.9) !important;
+        border: 2px solid rgba(102, 126, 234, 0.4) !important;
+        border-radius: 15px !important;
+        padding: 1rem !important;
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3) !important;
+    }
+
+    /* Style for st.info messages */
+    .stAlert {
+        background: rgba(22, 33, 62, 0.9) !important;
+        border: 2px solid rgba(102, 126, 234, 0.3) !important;
+        color: #e0e0e0 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
