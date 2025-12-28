@@ -265,6 +265,30 @@ st.markdown("""
         border-radius: 10px !important;
     }
 
+    /* Radio button styling */
+    .stRadio>div {
+        background: rgba(22, 33, 62, 0.6) !important;
+        border-radius: 10px !important;
+        padding: 0.5rem !important;
+    }
+
+    .stRadio label {
+        color: #e0e0e0 !important;
+        font-family: 'Orbitron', sans-serif !important;
+    }
+
+    /* File uploader styling */
+    .stFileUploader>div>div {
+        background: rgba(22, 33, 62, 0.8) !important;
+        border: 2px dashed rgba(102, 126, 234, 0.4) !important;
+        border-radius: 12px !important;
+    }
+
+    .stFileUploader label {
+        color: #e0e0e0 !important;
+        font-family: 'Orbitron', sans-serif !important;
+    }
+
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
@@ -447,25 +471,57 @@ with tab2:
     # Voice input section
     st.markdown("#### 🎙️ Voice Input")
 
+    # Choice between live recording and file upload
+    input_method = st.radio(
+        "Choose input method:",
+        ["🎙️ Record Audio (Live)", "📁 Upload Audio File"],
+        horizontal=True
+    )
+
     try:
-        from audio_recorder_streamlit import audio_recorder
         import speech_recognition as sr
         from gtts import gTTS
         import tempfile
 
-        # Audio recorder
-        audio_bytes = audio_recorder(
-            text="Click to record",
-            recording_color="#667eea",
-            neutral_color="#764ba2",
-            icon_size="2x"
-        )
+        audio_bytes = None
+        audio_file_path = None
+
+        if input_method == "🎙️ Record Audio (Live)":
+            try:
+                from audio_recorder_streamlit import audio_recorder
+
+                # Audio recorder
+                audio_bytes = audio_recorder(
+                    text="Click to record",
+                    recording_color="#667eea",
+                    neutral_color="#764ba2",
+                    icon_size="2x"
+                )
+            except Exception as recorder_error:
+                st.warning("⚠️ Live recording unavailable. Please use 'Upload Audio File' option instead.")
+                st.info("You can record audio on your device and upload it here.")
+        else:
+            # File upload option
+            st.markdown('<div class="info-box">📱 Record audio on your phone/device, then upload it here</div>', unsafe_allow_html=True)
+            uploaded_file = st.file_uploader(
+                "Upload audio file (WAV, MP3, M4A, FLAC)",
+                type=["wav", "mp3", "m4a", "flac", "ogg"],
+                help="Record audio using your device's voice recorder, then upload it here"
+            )
+
+            if uploaded_file is not None:
+                # Save uploaded file
+                with tempfile.NamedTemporaryFile(delete=False, suffix=f".{uploaded_file.name.split('.')[-1]}") as f:
+                    f.write(uploaded_file.read())
+                    audio_file_path = f.name
+                    audio_bytes = True  # Flag to process the file
 
         if audio_bytes:
-            # Save audio to temporary file
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-                f.write(audio_bytes)
-                audio_file_path = f.name
+            # Save audio to temporary file (only if from live recorder)
+            if input_method == "🎙️ Record Audio (Live)" and isinstance(audio_bytes, bytes):
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
+                    f.write(audio_bytes)
+                    audio_file_path = f.name
 
             try:
                 # Speech recognition
