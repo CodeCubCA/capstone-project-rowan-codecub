@@ -333,6 +333,18 @@ st.markdown("""
         border: 2px solid rgba(102, 126, 234, 0.3) !important;
         color: #e0e0e0 !important;
     }
+
+    /* Audio recorder component box */
+    iframe[title="audio_recorder_streamlit.audio_recorder"] {
+        background: rgba(22, 33, 62, 0.95) !important;
+        border: 3px solid rgba(102, 126, 234, 0.6) !important;
+        border-radius: 15px !important;
+        padding: 2rem !important;
+        box-shadow: 0 0 25px rgba(102, 126, 234, 0.4), 0 5px 15px rgba(0,0,0,0.3) !important;
+        margin: 1rem auto !important;
+        display: block !important;
+        max-width: 600px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -444,16 +456,12 @@ with tab2:
         import tempfile
 
         # Audio recorder in a styled container
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.markdown('<div style="background: rgba(22, 33, 62, 0.95); border: 3px solid rgba(102, 126, 234, 0.6); border-radius: 15px; padding: 2rem; margin: 1rem 0; box-shadow: 0 0 25px rgba(102, 126, 234, 0.4), 0 5px 15px rgba(0,0,0,0.3); text-align: center;">', unsafe_allow_html=True)
-            audio_bytes = audio_recorder(
-                text="Click to record",
-                recording_color="#667eea",
-                neutral_color="#764ba2",
-                icon_size="2x"
-            )
-            st.markdown('</div>', unsafe_allow_html=True)
+        audio_bytes = audio_recorder(
+            text="Click to record",
+            recording_color="#667eea",
+            neutral_color="#764ba2",
+            icon_size="2x"
+        )
 
         if audio_bytes:
             # Save audio to temporary file
