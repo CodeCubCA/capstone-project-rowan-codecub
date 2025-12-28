@@ -27,11 +27,27 @@ st.markdown("""
     /* Import space font */
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
 
+    /* Force dark background on entire page */
+    html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
+        background: linear-gradient(to bottom, #0a0e27 0%, #1a1a2e 50%, #16213e 100%) !important;
+    }
+
+    .stApp {
+        background: linear-gradient(to bottom, #0a0e27 0%, #1a1a2e 50%, #16213e 100%) !important;
+    }
+
+    /* Override any white backgrounds */
+    section[data-testid="stSidebar"],
+    [data-testid="stHeader"] {
+        background: transparent !important;
+    }
+
     /* Animated starfield background */
     .main {
         padding: 1rem 2rem;
-        background: linear-gradient(to bottom, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+        background: linear-gradient(to bottom, #0a0e27 0%, #1a1a2e 50%, #16213e 100%) !important;
         position: relative;
+        min-height: 100vh;
     }
 
     .main::before {
@@ -233,14 +249,24 @@ st.markdown("""
     }
 
     .warning-box {
-        background: rgba(255, 193, 7, 0.15);
-        padding: 1.2rem;
+        background: rgba(22, 33, 62, 0.95) !important;
+        padding: 1.5rem;
         border-radius: 12px;
-        border-left: 4px solid #ffc107;
+        border: 3px solid #ffc107;
         margin-bottom: 1rem;
-        color: #ffd54f;
-        box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+        color: #ffd54f !important;
+        box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
         backdrop-filter: blur(10px);
+    }
+
+    .warning-box h3 {
+        color: #ffc107 !important;
+        margin-top: 0;
+    }
+
+    .warning-box a {
+        color: #667eea !important;
+        text-decoration: underline;
     }
 
     /* Headings with glow */
