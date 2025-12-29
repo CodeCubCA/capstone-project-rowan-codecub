@@ -334,6 +334,28 @@ st.markdown("""
         color: #e0e0e0 !important;
     }
 
+    /* Audio recorder frame box */
+    .audio-recorder-frame {
+        background: rgba(22, 33, 62, 0.95) !important;
+        border: 3px solid rgba(102, 126, 234, 0.6) !important;
+        border-radius: 15px !important;
+        padding: 2rem !important;
+        box-shadow: 0 0 25px rgba(102, 126, 234, 0.4), 0 5px 15px rgba(0,0,0,0.3) !important;
+        margin: 1.5rem auto !important;
+        max-width: 600px !important;
+        text-align: center;
+    }
+
+    /* Voice instruction text */
+    .voice-instruction {
+        color: #e0e0e0;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        text-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+    }
+
     </style>
 """, unsafe_allow_html=True)
 
@@ -437,6 +459,7 @@ with tab2:
 
     # Voice input section
     st.markdown("#### 🎙️ Voice Input")
+    st.markdown('<p class="voice-instruction">✨ Click the microphone button below to start recording your voice ✨</p>', unsafe_allow_html=True)
 
     try:
         from audio_recorder_streamlit import audio_recorder
@@ -444,13 +467,15 @@ with tab2:
         from gtts import gTTS
         import tempfile
 
-        # Audio recorder
+        # Audio recorder in styled frame
+        st.markdown('<div class="audio-recorder-frame">', unsafe_allow_html=True)
         audio_bytes = audio_recorder(
-            text="Click to record",
+            text="",
             recording_color="#667eea",
             neutral_color="#764ba2",
-            icon_size="2x"
+            icon_size="3x"
         )
+        st.markdown('</div>', unsafe_allow_html=True)
 
         if audio_bytes:
             # Save audio to temporary file
