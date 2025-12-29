@@ -334,23 +334,6 @@ st.markdown("""
         color: #e0e0e0 !important;
     }
 
-    /* Audio recorder component styling */
-    iframe[title="audiorecorder.audiorecorder"] {
-        display: block !important;
-        margin: 1rem auto !important;
-    }
-
-    /* Style for the container div around audio recorder */
-    .audio-recorder-box {
-        background: rgba(22, 33, 62, 0.95) !important;
-        border: 3px solid rgba(102, 126, 234, 0.6) !important;
-        border-radius: 15px !important;
-        padding: 2rem !important;
-        box-shadow: 0 0 25px rgba(102, 126, 234, 0.4), 0 5px 15px rgba(0,0,0,0.3) !important;
-        margin: 1rem auto !important;
-        max-width: 600px !important;
-        text-align: center;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -454,22 +437,25 @@ with tab2:
 
     # Voice input section
     st.markdown("#### 🎙️ Voice Input")
-    st.markdown("Upload an audio file or record using your device's voice recorder:")
 
     try:
+        from audio_recorder_streamlit import audio_recorder
         import speech_recognition as sr
         from gtts import gTTS
         import tempfile
 
-        # Audio file uploader in a styled container
-        st.markdown('<div class="audio-recorder-box">', unsafe_allow_html=True)
-        audio_file = st.file_uploader("", type=["wav", "mp3", "m4a", "ogg", "flac"], label_visibility="collapsed")
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Audio recorder
+        audio_bytes = audio_recorder(
+            text="Click to record",
+            recording_color="#667eea",
+            neutral_color="#764ba2",
+            icon_size="2x"
+        )
 
-        if audio_file is not None:
-            # Save uploaded audio to temporary file
+        if audio_bytes:
+            # Save audio to temporary file
             with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-                f.write(audio_file.read())
+                f.write(audio_bytes)
                 audio_file_path = f.name
 
             try:
@@ -525,7 +511,7 @@ with tab2:
                 st.error(f"Error: {str(e)}")
 
     except ImportError:
-        st.warning("Voice features require SpeechRecognition and gTTS packages. Install them to enable voice mode.")
+        st.warning("Voice features require audio-recorder-streamlit package. Install it to enable voice mode.")
 
     # Display voice conversation history
     st.markdown("---")
