@@ -335,7 +335,7 @@ st.markdown("""
     }
 
     /* Audio recorder component box */
-    iframe[title="audio_recorder_streamlit.audio_recorder"] {
+    iframe[title="audiorecorder.audiorecorder"] {
         background: rgba(22, 33, 62, 0.95) !important;
         border: 3px solid rgba(102, 126, 234, 0.6) !important;
         border-radius: 15px !important;
@@ -450,27 +450,19 @@ with tab2:
     st.markdown("#### 🎙️ Voice Input")
 
     try:
-        from audio_recorder_streamlit import audio_recorder
+        from audiorecorder import audiorecorder
         import speech_recognition as sr
         from gtts import gTTS
         import tempfile
 
         # Audio recorder in a styled container
-        audio_bytes = audio_recorder(
-            text="Click to record",
-            recording_color="#667eea",
-            neutral_color="#764ba2",
-            icon_size="2x"
-        )
+        st.markdown("Click the microphone button below to start recording:")
+        audio_bytes = audiorecorder("Click to record", "Recording...")
 
-        # Show helper message if component may not be rendering
-        if not audio_bytes:
-            st.info("💡 **Note:** If you don't see the microphone button above, the audio recorder component may not be compatible with your local setup. Try accessing the app on HuggingFace Spaces for full Voice Mode functionality!")
-
-        if audio_bytes:
+        if len(audio_bytes) > 0:
             # Save audio to temporary file
             with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-                f.write(audio_bytes)
+                audio_bytes.export(f.name, format="wav")
                 audio_file_path = f.name
 
             try:
@@ -526,7 +518,7 @@ with tab2:
                 st.error(f"Error: {str(e)}")
 
     except ImportError:
-        st.warning("Voice features require audio-recorder-streamlit package. Install it to enable voice mode.")
+        st.warning("Voice features require streamlit-audiorecorder package. Install it to enable voice mode.")
 
     # Display voice conversation history
     st.markdown("---")
