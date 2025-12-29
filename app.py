@@ -334,16 +334,22 @@ st.markdown("""
         color: #e0e0e0 !important;
     }
 
-    /* Audio recorder component box */
+    /* Audio recorder component styling */
     iframe[title="audiorecorder.audiorecorder"] {
+        display: block !important;
+        margin: 1rem auto !important;
+    }
+
+    /* Style for the container div around audio recorder */
+    .audio-recorder-box {
         background: rgba(22, 33, 62, 0.95) !important;
         border: 3px solid rgba(102, 126, 234, 0.6) !important;
         border-radius: 15px !important;
         padding: 2rem !important;
         box-shadow: 0 0 25px rgba(102, 126, 234, 0.4), 0 5px 15px rgba(0,0,0,0.3) !important;
         margin: 1rem auto !important;
-        display: block !important;
         max-width: 600px !important;
+        text-align: center;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -448,6 +454,7 @@ with tab2:
 
     # Voice input section
     st.markdown("#### 🎙️ Voice Input")
+    st.markdown("Click the microphone button below to start recording:")
 
     try:
         from audiorecorder import audiorecorder
@@ -456,8 +463,9 @@ with tab2:
         import tempfile
 
         # Audio recorder in a styled container
-        st.markdown("Click the microphone button below to start recording:")
-        audio_bytes = audiorecorder("Click to record", "Recording...")
+        st.markdown('<div class="audio-recorder-box">', unsafe_allow_html=True)
+        audio_bytes = audiorecorder("", "")
+        st.markdown('</div>', unsafe_allow_html=True)
 
         if len(audio_bytes) > 0:
             # Save audio to temporary file
