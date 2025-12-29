@@ -463,6 +463,10 @@ with tab2:
             icon_size="2x"
         )
 
+        # Show helper message if component may not be rendering
+        if not audio_bytes:
+            st.info("💡 **Note:** If you don't see the microphone button above, the audio recorder component may not be compatible with your local setup. Try accessing the app on HuggingFace Spaces for full Voice Mode functionality!")
+
         if audio_bytes:
             # Save audio to temporary file
             with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
