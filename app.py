@@ -356,6 +356,13 @@ st.markdown("""
         text-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
     }
 
+    /* Center audio recorder and remove white background */
+    iframe[title="audio_recorder_streamlit.audio_recorder"] {
+        background: transparent !important;
+        display: block !important;
+        margin: 0 auto !important;
+    }
+
     </style>
 """, unsafe_allow_html=True)
 
