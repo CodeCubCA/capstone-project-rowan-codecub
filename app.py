@@ -454,23 +454,22 @@ with tab2:
 
     # Voice input section
     st.markdown("#### 🎙️ Voice Input")
-    st.markdown("Click the microphone button below to start recording:")
+    st.markdown("Upload an audio file or record using your device's voice recorder:")
 
     try:
-        from audiorecorder import audiorecorder
         import speech_recognition as sr
         from gtts import gTTS
         import tempfile
 
-        # Audio recorder in a styled container
+        # Audio file uploader in a styled container
         st.markdown('<div class="audio-recorder-box">', unsafe_allow_html=True)
-        audio_bytes = audiorecorder("", "")
+        audio_file = st.file_uploader("", type=["wav", "mp3", "m4a", "ogg", "flac"], label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
 
-        if len(audio_bytes) > 0:
-            # Save audio to temporary file
+        if audio_file is not None:
+            # Save uploaded audio to temporary file
             with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-                audio_bytes.export(f.name, format="wav")
+                f.write(audio_file.read())
                 audio_file_path = f.name
 
             try:
@@ -526,7 +525,7 @@ with tab2:
                 st.error(f"Error: {str(e)}")
 
     except ImportError:
-        st.warning("Voice features require streamlit-audiorecorder package. Install it to enable voice mode.")
+        st.warning("Voice features require SpeechRecognition and gTTS packages. Install them to enable voice mode.")
 
     # Display voice conversation history
     st.markdown("---")
